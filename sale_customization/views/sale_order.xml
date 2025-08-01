@@ -1,0 +1,89 @@
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_target_delivery" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.target.delivery</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='validity_date']" position="before">
+                    <field name="target_delivery_date" />
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="payment_method_id" />
+                </xpath>
+            </field>
+        </record>
+        <record id="view_order_form_inherit_partner_id" model="ir.ui.view">
+            <field name="name">sale.order.partner_id.remove_quick_create</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="options">{'no_quick_create': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_order_form_custom_domain" model="ir.ui.view">
+            <field name="name">sale.order.form.custom.domain</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="attributes">
+                    <attribute name="domain">
+                        ['|',
+                        ('qty_available', '&gt;', 0),
+                        '&amp;',
+                        ('qty_available', '=', 0),
+                        ('is_discontinued', '=', False)
+                        ]
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_order_form_inherit_partner_id" model="ir.ui.view">
+            <field name="name">sale.order.partner_id.remove_quick_create</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="attributes">
+                    <attribute name="string">Selected Variant</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="attributes">
+                    <attribute name="string">Selected Variant</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='discount']" position="attributes">
+                    <attribute name="string">Discount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="before">
+                    <field name="custom_description" string="Name" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="after">
+                    <field name="product_default_code" string="Reference Code" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="string">Quantity Purchased</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="attributes">
+                    <attribute name="string">Unit Price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="attributes">
+                    <attribute name="string">Total Value</attribute>
+                </xpath>
+                <xpath expr="//page[@name='other_information']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//page[@name='customer_signature']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="your_custom_sale_order_form_view" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.hide.optional.products</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_management.sale_order_form_quote" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='optional_products']" position="replace" />
+            </field>
+        </record>
+    </data>
+</odoo>

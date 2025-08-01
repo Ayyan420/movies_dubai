@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_product_form_discontinued" model="ir.ui.view">
+        <field name="name">product.product.form.discontinued</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="is_discontinued" string="Discontinued Variant" class="oe_inline ml-4" />
+            </xpath>
+        </field>
+    </record>
+    <record id="product_variant_easy_edit_view_inherit" model="ir.ui.view">
+        <field name="name">product.product.form.discontinued.easy</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="after">
+                <field name="is_discontinued" string="Discontinued Variant" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

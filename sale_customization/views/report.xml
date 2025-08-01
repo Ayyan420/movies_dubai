@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <template id="inherit_report_saleorder_document_custom" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//thead//th[@name='th_description']" position="replace">
+                <th name="th_description" class="text-start">Ordered Products</th>
+            </xpath>
+            <xpath expr="//thead//th[@name='th_discount']" position="replace">
+                <th name="th_discount" t-if="display_discount" class="text-end">
+                    <span>Discount</span>
+                </th>
+            </xpath>
+            <xpath expr="//thead//th[@name='th_subtotal']" position="replace">
+                <th name="th_subtotal" class="text-end">
+                    <span>Final Value</span>
+                </th>
+            </xpath>
+            <xpath expr="//strong[contains(., 'Shipping Address')]" position="replace">
+                <strong>Delivery Address</strong>
+            </xpath>
+            <xpath expr="//div[@id='informations']" position="inside">
+                <div class="col" t-if="doc.target_delivery_date" name="target_delivery_date">
+                    <strong>Target Delivery Date</strong>
+                    <div t-field="doc.target_delivery_date" t-options='{"widget": "date"}' />
+                </div>
+                <div class="col" t-if="doc.payment_method_id" name="payment_method_id">
+                    <strong>Payment Method:</strong>
+                    <div t-field="doc.payment_method_id.name" />
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>
