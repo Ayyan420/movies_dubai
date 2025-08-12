@@ -24,7 +24,11 @@
                 </div>
                 <div class="col" t-if="doc.payment_method_id" name="payment_method_id">
                     <strong>Payment Method:</strong>
-                    <div t-field="doc.payment_method_id.name" />
+                    <t t-esc="', '.join(doc.payment_method_id.mapped('name'))" />
+                    <t t-if="doc.payment_method_id.installment_line_ids">
+                        <span> — </span>
+                        <t t-esc="', '.join(doc.payment_method_id.installment_line_ids.mapped('name'))" />
+                    </t>
                 </div>
             </xpath>
         </template>

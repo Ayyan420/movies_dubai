@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <template id="inherit_report_invoice_document_custom" inherit_id="account.report_invoice_document">
+            <xpath expr="//thead//th[@name='th_description']" position="replace">
+                <th name="th_description" class="text-start">Ordered Products</th>
+            </xpath>
+            <xpath expr="//thead//th[@name='th_discount']" position="replace">
+                <th name="th_discount" t-if="display_discount" class="text-end">
+                    <span>Discount</span>
+                </th>
+            </xpath>
+            <xpath expr="//thead//th[@name='th_subtotal']" position="replace">
+                <th name="th_subtotal" class="text-end">
+                    <span>Final Value</span>
+                </th>
+            </xpath>
+            <xpath expr="//strong[contains(., 'Shipping Address')]" position="replace">
+                <strong>Delivery Address</strong>
+            </xpath>
+            <xpath expr="//div[@id='informations']" position="inside">
+                <div class="col" t-if="o.target_delivery_date" name="target_delivery_date">
+                    <strong>Target Delivery Date</strong>
+                    <div t-field="o.target_delivery_date" t-options='{"widget": "date"}' />
+                </div>
+                <div class="col" t-if="o.payment_method_id" name="payment_method_id">
+                    <strong>Payment Method:</strong>
+                    <t t-esc="', '.join(o.payment_method_id.mapped('name'))" />
+                    <t t-if="o.payment_method_id.installment_line_ids">
+                        <span> — </span>
+                        <t t-esc="', '.join(o.payment_method_id.installment_line_ids.mapped('name'))" />
+                    </t>
+                </div>
+            </xpath>
+            <xpath expr="//div[hasclass('clearfix')]" position="inside">
+                <t t-if="o.invoice_origin">
+                    <t t-set="sale" t-value="request.env['sale.order'].sudo().search([('name','=',o.invoice_origin)],limit=1)"></t>
+                    <t t-if="sale">
+                        <t t-if="sale.is_signed">
+                            <div class="mt-4 ml64 mr4" name="signature">
+                                <div class="offset-8">
+                                    <strong>Signature</strong>
+                                </div>
+                                <div class="offset-8">
+                                    <img t-att-src="image_data_uri(sale.signature)" style="max-height: 4cm; max-width: 8cm;" />
+                                </div>
+                                <div class="offset-8 text-center">
+                                    <span t-field="sale.signed_by">Oscar Morgan</span>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>

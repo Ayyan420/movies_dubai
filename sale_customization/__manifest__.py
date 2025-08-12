@@ -1,27 +1,22 @@
 {
-    'name': 'Custom Sale Order',
+    'name': 'Sale Order Customizations',
     'version': '1.0',
     'category': 'Sales',
-    'summary': 'Customize Sale Order',
-    
-    'description': """
-        This module customizes the Sale Order to remove the 'Create' option when creating customers.
-    """,
-    
-    'depends': [ 'sale','product','purchase','product_customization'],
-    
+    'depends': [
+        'sale',
+        'product',
+        'account',
+        'mail',
+        'base',
+        'accounting_customization',
+        'delivery'
+    ],
     'data': [
-        'views/sale_order.xml',
+        'security/ir.model.access.csv',
+        'views/views.xml',
+        'views/own_delivery_days.xml',
         'views/report.xml',
-     ],
-
-    'assets': {
-        'web.assets_backend': [
-            'sale_customization/static/src/css/app.css',
-        ]
-           
-    },
-    
+    ],
     'installable': True,
     'application': False,
     'auto_install': False,

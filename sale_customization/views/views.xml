@@ -1,0 +1,110 @@
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_partner_id" model="ir.ui.view">
+            <field name="name">sale.order.partner_id.remove_quick_create</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <!--  <xpath expr="//page[@name='customer_signature']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath> -->
+                <xpath expr="//form[@class='o_sale_order']/header/button[@name='action_quotation_send']" position="after">
+                    <field name="is_signed" invisible="1"></field>
+                    <widget name="signature" string="Sign" invisible="not id or is_signed or state not in ['draft','sent']" full_name="partner_id" />
+                </xpath>
+                <xpath expr="//button[@name='action_confirm'][1]" position="replace">
+                    <button name="action_confirm" id="action_confirm" data-hotkey="q" string="Confirm" class="btn-primary" type="object" context="{'validate_analytic': True}" invisible="not is_signed or state != 'sent'" />
+                </xpath>
+                <xpath expr="//button[@name='action_confirm'][2]" position="replace">
+                    <button name="action_confirm" data-hotkey="q" string="Confirm" type="object" context="{'validate_analytic': True}" invisible="not is_signed or state != 'draft'" />
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="options">{'no_quick_create': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="attributes">
+                    <attribute name="string">Selected Variant</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="attributes">
+                    <attribute name="string">Selected Variant</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='discount']" position="attributes">
+                    <attribute name="string">Discount</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="before">
+                    <field name="custom_description" string="Name" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="after">
+                    <field name="product_default_code" string="Reference Code" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="string">Quantity Purchased</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='price_unit']" position="attributes">
+                    <attribute name="string">Unit Price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/list/field[@name='price_subtotal']" position="attributes">
+                    <attribute name="string">Total Value</attribute>
+                </xpath>
+                <xpath expr="//page[@name='other_information']" position="attributes">
+                    <attribute name="groups">sales_team.group_sale_salesman_all_leads,base.group_system</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="target_delivery_date" readonly="state not in ['draft','sent']" />
+                </xpath>
+                <xpath expr="//label[@for='pricelist_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div[@groups='product.group_product_pricelist']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='target_delivery_date']" position="after">
+                    <field name="payment_method_id" domain="[('journal_id.type','=','bank'),('payment_type','=','inbound')]" widget="many2many_tags" readonly="state not in ['draft','sent']" required="1" />
+                </xpath>
+                <xpath expr="//field[@name='payment_method_id']" position="after">
+                    <field name="payment_method_payment_mode" invisible="1" />
+                    <field name="payment_installment_id" widget="many2many_tags" readonly="state not in ['draft','sent']" domain="[('payment_method_id', 'in', payment_method_id)]" context="{'default_payment_method_id': payment_method_id}" invisible="not payment_method_id or payment_method_payment_mode != 'installments'" required="payment_method_payment_mode == 'installments'" options="{'no_create': True}" />
+                </xpath>
+                <xpath expr="//button[@name='action_open_discount_wizard']" position="attributes">
+                    <attribute name="groups">sales_team.group_sale_salesman_all_leads,base.group_system</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="context">{'res_partner_search_mode': 'customer', 'show_address': False, 'show_vat': False}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_invoice_id']" position="attributes">
+                    <attribute name="context">{'default_type': 'invoice', 'show_address': True, 'show_vat': True, 'default_parent_id': partner_id}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="attributes">
+                    <attribute name="context">{'default_type': 'delivery', 'show_address': True, 'show_vat': True, 'default_parent_id': partner_id}</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="your_custom_sale_order_form_view" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.hide.optional.products</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_management.sale_order_form_quote" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='optional_products']" position="replace" />
+            </field>
+        </record>
+        <record id="choose_delivery_carrier_view_form_ext" model="ir.ui.view">
+            <field name="name">choose.delivery.carrier.form.inherit.hide.optional.products</field>
+            <field name="model">choose.delivery.carrier</field>
+            <field name="inherit_id" ref="delivery.choose_delivery_carrier_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_row'][2]//field" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//label[@for='display_price']" position="replace">
+                    <label for="own_delivery_price" />
+                </xpath>
+                <xpath expr="//div[@class='o_row'][2]//field" position="after">
+                    <field name="own_delivery_price" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" invisible="not carrier_id" groups="!sales_team.group_sale_salesman_all_leads" />
+                    <field name="own_delivery_price" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="0" invisible="not carrier_id" groups="sales_team.group_sale_manager,sales_team.group_sale_salesman_all_leads" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

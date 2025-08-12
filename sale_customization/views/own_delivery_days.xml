@@ -1,0 +1,40 @@
+<odoo>
+    <record id="view_own_delivery_days_form" model="ir.ui.view">
+        <field name="name">own.delivery.days.form</field>
+        <field name="model">own.delivery.days</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="from_date" required="1" />
+                        <field name="to_date" required="1" />
+                        <field name="days" required="1" />
+                        <field name="company_id" readonly="1" />
+                    </group>
+                </sheet>
+                <chatter></chatter>
+            </form>
+        </field>
+    </record>
+    <record id="view_own_delivery_days_tree" model="ir.ui.view">
+        <field name="name">own.delivery.days.list</field>
+        <field name="model">own.delivery.days</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="from_date" />
+                <field name="to_date" />
+                <field name="days" />
+                <field name="company_id" readonly="1" />
+            </list>
+        </field>
+    </record>
+    <record id="action_own_delivery_days" model="ir.actions.act_window">
+        <field name="name">Own Delivery Days</field>
+        <field name="res_model">own.delivery.days</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">
+            ['|', ('company_id', '=', False), ('company_id', '=', allowed_company_ids[0])]
+        </field>
+    </record>
+    <menuitem id="menu_own_delivery_days" name="Own Delivery Days" parent="sale.menu_sale_config" action="action_own_delivery_days" groups="base.group_user" sequence="50" />
+</odoo>
